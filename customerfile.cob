@@ -1,0 +1,33 @@
+       >>SOURCE FORMAT FREE
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. CUST-FILE.
+       AUTHOR. Love Bellinder.
+
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT CUSTOMER-FILE ASSIGN TO
+           "Customers.dat"
+           ORGANIZATION IS LINE SEQUENTIAL.
+       DATA DIVISION.
+       FILE SECTION.
+       FD  CUSTOMER-FILE.
+    *>    Fd = file defintion
+       01  CUSTOMER-RECORD.
+           05 FIRST-NAME  PIC X(20).
+           05 LAST-NAME   PIC X(20).
+       WORKING-STORAGE SECTION.
+       01 WS-CUSTOMER-RECORD.
+           05 WS-FIRST-NAME  PIC X(20).
+           05 WS-LAST-NAME   PIC X(20).
+       01 WS-EOF             PIC A.
+       PROCEDURE DIVISION.
+       OPEN INPUT CUSTOMER-FILE.
+       PERFORM UNTIL WS-EOF = 'Y'
+           READ CUSTOMER-FILE INTO WS-CUSTOMER-RECORD
+              AT END MOVE 'Y' TO WS-EOF
+              NOT AT END DISPLAY WS-CUSTOMER-RECORD
+           END-READ
+       END-PERFORM.
+       CLOSE CUSTOMER-FILE.
+       STOP RUN.
